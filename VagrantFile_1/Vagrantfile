@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+
+ config.vm.define "server" do |server| 
+ server.vm.box = "ubuntu/jammy64"
+ server.vm.network "private_network", ip: "192.168.56.10",   virtualbox__intnet: "net1" 
+ server.vm.hostname = "server" 
+ server.vm.provision "shell", path: "server_script.sh"
+ server.vm.provider :virtualbox do |vb|
+      vb.name = "server"
+      vb.memory = 2048
+      vb.cpus = 2
+    end
+ end 
+ config.vm.define "client" do |client| 
+ client.vm.box = "ubuntu/jammy64"
+ client.vm.network "private_network", ip: "192.168.56.21",  virtualbox__intnet: "net1" 
+ client.vm.hostname = "client"
+ client.vm.provision "shell", path: "client_script.sh"
+ client.vm.provider :virtualbox do |vb|
+      vb.name = "client"
+      vb.memory = 2048 
+      vb.cpus = 2 
+    end
+ end 
+end 
